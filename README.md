@@ -136,7 +136,7 @@ poetry run jupyter lab notebooks/car_price_analysis.ipynb
 - [Model Card](docs/model_card.md): данные, обучение, фактические метрики и ограничения.
 - [Описание BPMN-процесса](docs/bpmn.md).
 - [Редактируемая схема BPMN 2.0](docs/car_price_process.bpmn).
-- Изображение схемы: [SVG](docs/car_price_process.svg), [PNG для отчёта](docs/car_price_process.png).
+- Изображение схемы: [SVG](docs/car_price_process.svg), [PNG](docs/car_price_process.png).
 
 Схема описывает работу интерфейса, включая обработку ошибки и повторный запрос.
 Model Card отражает текущую модель; после переобучения нужно актуализировать метрики
