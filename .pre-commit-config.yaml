@@ -1,0 +1,19 @@
+repos:
+  - repo: local
+    hooks:
+      - id: ruff-check
+        name: Ruff — проверка кода
+        entry: poetry run ruff check --fix
+        language: system
+        types: [python]
+      - id: ruff-format
+        name: Ruff — форматирование
+        entry: poetry run ruff format
+        language: system
+        types: [python]
+      - id: mypy
+        name: mypy — проверка типов
+        entry: poetry run mypy
+        language: system
+        pass_filenames: false
+        types: [python]

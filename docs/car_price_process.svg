@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="700" viewBox="0 0 1800 700">
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#334155"/></marker></defs>
+<rect width="1800" height="700" fill="white"/>
+<g font-family="Arial, sans-serif" fill="#172033">
+<text x="30" y="35" font-size="23" font-weight="bold">BPMN 2.0 · Оценка стоимости автомобиля</text>
+<rect x="30" y="60" width="1730" height="540" fill="#fff" stroke="#334155" stroke-width="2"/>
+<rect x="60" y="60" width="1700" height="170" fill="#f8fafc" stroke="#64748b"/>
+<rect x="60" y="230" width="1700" height="370" fill="#f0f9ff" stroke="#64748b"/>
+<path d="M90 60V600" stroke="#64748b"/>
+<text transform="translate(51,480) rotate(-90)" font-size="16">Оценка стоимости автомобиля</text>
+<text transform="translate(80,199) rotate(-90)" font-size="15">Пользователь</text>
+<text transform="translate(80,465) rotate(-90)" font-size="15">Приложение</text>
+<rect x="485" y="270" width="770" height="160" rx="12" fill="white" stroke="#334155" stroke-width="2"/>
+<text x="500" y="293" font-size="16" font-weight="bold">Расчёт стоимости</text>
+<polyline points="196,145 240,145" fill="none" stroke="#334155" stroke-width="2" marker-end="url(#arrow)"/>
+<polyline points="440,145 470,145 470,345 485,345" fill="none" stroke="#334155" stroke-width="2" marker-end="url(#arrow)"/>
+<polyline points="1255,345 1310,345" fill="none" stroke="#334155" stroke-width="2" marker-end="url(#arrow)"/>
+<polyline points="1465,345 1560,345 1560,180" fill="none" stroke="#334155" stroke-width="2" marker-end="url(#arrow)"/>
+<polyline points="1635,145 1680,145" fill="none" stroke="#334155" stroke-width="2" marker-end="url(#arrow)"/>
+<polyline points="1226,448 1226,468 1150,468 1150,492" fill="none" stroke="#334155" stroke-width="2" marker-end="url(#arrow)"/>
+<polyline points="1260,527 1280,527 1280,205 830,205 830,180" fill="none" stroke="#334155" stroke-width="2" marker-end="url(#arrow)"/>
+<polyline points="830,110 830,78 340,78 340,110" fill="none" stroke="#334155" stroke-width="2" marker-end="url(#arrow)"/>
+<polyline points="531,345 555,345" fill="none" stroke="#334155" stroke-width="2" marker-end="url(#arrow)"/>
+<polyline points="705,345 735,345" fill="none" stroke="#334155" stroke-width="2" marker-end="url(#arrow)"/>
+<polyline points="915,345 945,345" fill="none" stroke="#334155" stroke-width="2" marker-end="url(#arrow)"/>
+<polyline points="1125,345 1205,345" fill="none" stroke="#334155" stroke-width="2" marker-end="url(#arrow)"/>
+<circle cx="178.0" cy="145.0" r="18.0" fill="white" stroke="#334155" stroke-width="2"/>
+<text x="178.0" y="185" text-anchor="middle" font-size="13">Нужна оценка</text>
+<rect x="240" y="110" width="200" height="70" rx="10" fill="white" stroke="#334155" stroke-width="2"/>
+<circle cx="256" cy="122" r="4" fill="none" stroke="#334155"/>
+<path d="M256,126v10 m-6,-5h12 m-6,5l-5,6 m5,-6l5,6" fill="none" stroke="#334155"/>
+<text x="340.0" y="151.0" text-anchor="middle" font-size="14">Ввести характеристики</text>
+<text x="340.0" y="169.0" text-anchor="middle" font-size="14">и нажать «Рассчитать»</text>
+<circle cx="518.0" cy="345.0" r="13.0" fill="white" stroke="#334155" stroke-width="2"/>
+<rect x="555" y="308" width="150" height="74" rx="10" fill="white" stroke="#334155" stroke-width="2"/>
+<text x="563" y="332" font-size="22">⚙</text>
+<text x="630.0" y="342.0" text-anchor="middle" font-size="14">Загрузить</text>
+<text x="630.0" y="360.0" text-anchor="middle" font-size="14">Pipeline</text>
+<rect x="735" y="308" width="180" height="74" rx="10" fill="white" stroke="#334155" stroke-width="2"/>
+<text x="743" y="332" font-size="22">⚙</text>
+<text x="825.0" y="342.0" text-anchor="middle" font-size="14">Проверить и</text>
+<text x="825.0" y="360.0" text-anchor="middle" font-size="14">подготовить признаки</text>
+<rect x="945" y="308" width="180" height="74" rx="10" fill="white" stroke="#334155" stroke-width="2"/>
+<text x="953" y="332" font-size="22">⚙</text>
+<text x="1035.0" y="342.0" text-anchor="middle" font-size="14">Рассчитать и</text>
+<text x="1035.0" y="360.0" text-anchor="middle" font-size="14">проверить цену</text>
+<circle cx="1218.0" cy="345.0" r="13.0" fill="white" stroke="#334155" stroke-width="4"/>
+<circle cx="1226.0" cy="430.0" r="18.0" fill="white" stroke="#334155" stroke-width="2"/>
+<circle cx="1226.0" cy="430.0" r="14.0" fill="none" stroke="#334155"/>
+<path d="M1223.0,420.0 L1232.0,420.0 L1226.0,429.0 L1231.0,429.0 L1220.0,440.0 L1224.0,432.0 L1219.0,432.0 Z" fill="#334155"/>
+<text x="1226.0" y="402" text-anchor="middle" font-size="13">Ошибка</text>
+<rect x="1310" y="308" width="155" height="74" rx="10" fill="white" stroke="#334155" stroke-width="2"/>
+<text x="1318" y="332" font-size="22">⚙</text>
+<text x="1387.5" y="342.0" text-anchor="middle" font-size="14">Показать прогноз</text>
+<text x="1387.5" y="360.0" text-anchor="middle" font-size="14">в лакхах ₹</text>
+<rect x="1485" y="110" width="150" height="70" rx="10" fill="white" stroke="#334155" stroke-width="2"/>
+<circle cx="1501" cy="122" r="4" fill="none" stroke="#334155"/>
+<path d="M1501,126v10 m-6,-5h12 m-6,5l-5,6 m5,-6l5,6" fill="none" stroke="#334155"/>
+<text x="1560.0" y="151.0" text-anchor="middle" font-size="14">Просмотреть</text>
+<text x="1560.0" y="169.0" text-anchor="middle" font-size="14">результат</text>
+<circle cx="1698.0" cy="145.0" r="18.0" fill="white" stroke="#334155" stroke-width="4"/>
+<text x="1698.0" y="185" text-anchor="middle" font-size="13">Оценка получена</text>
+<rect x="1040" y="492" width="220" height="70" rx="10" fill="white" stroke="#334155" stroke-width="2"/>
+<text x="1048" y="516" font-size="22">⚙</text>
+<text x="1150.0" y="524.0" text-anchor="middle" font-size="14">Показать сообщение</text>
+<text x="1150.0" y="542.0" text-anchor="middle" font-size="14">об ошибке</text>
+<rect x="720" y="110" width="220" height="70" rx="10" fill="white" stroke="#334155" stroke-width="2"/>
+<circle cx="736" cy="122" r="4" fill="none" stroke="#334155"/>
+<path d="M736,126v10 m-6,-5h12 m-6,5l-5,6 m5,-6l5,6" fill="none" stroke="#334155"/>
+<text x="830.0" y="151.0" text-anchor="middle" font-size="14">Исправить данные</text>
+<text x="830.0" y="169.0" text-anchor="middle" font-size="14">или повторить запрос</text>
+<text x="30" y="634" font-size="15">Предусловие: модель обучена. Граничное событие прерывает расчёт при ошибке загрузки, входных данных или предсказания.</text>
+<text x="30" y="662" font-size="15">Описательная схема: повторный запрос выполняет пользователь. Обучение и обновление модели находятся вне этого процесса.</text>
+</g></svg>

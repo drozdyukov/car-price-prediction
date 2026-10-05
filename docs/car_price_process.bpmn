@@ -1,0 +1,211 @@
+<?xml version='1.0' encoding='utf-8'?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_CarPrice" targetNamespace="https://example.org/car-price/bpmn" exporter="Car Price Project" exporterVersion="0.1.0">
+  <bpmn:process id="Process_CarPrice" name="Оценка стоимости автомобиля" isExecutable="false">
+    <bpmn:documentation>Описательная схема реализованного интерфейса. Обученная модель — предварительное условие. Ошибки загрузки, валидации и расчёта показаны граничным событием ошибки; это не исполняемая BPMN-автоматизация.</bpmn:documentation>
+    <bpmn:laneSet id="LaneSet_Main">
+      <bpmn:lane id="Lane_User" name="Пользователь">
+        <bpmn:flowNodeRef>Start</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Input</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Retry</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Review</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_App" name="Приложение">
+        <bpmn:flowNodeRef>Calculate</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>ErrorBoundary</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Show</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>ShowError</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="Start" name="Нужна оценка">
+      <bpmn:outgoing>F1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:userTask id="Input" name="Ввести характеристики и нажать «Рассчитать»">
+      <bpmn:incoming>F1</bpmn:incoming>
+      <bpmn:incoming>F8</bpmn:incoming>
+      <bpmn:outgoing>F2</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:subProcess id="Calculate" name="Расчёт стоимости">
+      <bpmn:incoming>F2</bpmn:incoming>
+      <bpmn:outgoing>F3</bpmn:outgoing>
+      <bpmn:startEvent id="InnerStart" name="">
+        <bpmn:outgoing>I1</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:serviceTask id="Load" name="Загрузить Pipeline">
+        <bpmn:incoming>I1</bpmn:incoming>
+        <bpmn:outgoing>I2</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:serviceTask id="Prepare" name="Проверить и подготовить признаки">
+        <bpmn:incoming>I2</bpmn:incoming>
+        <bpmn:outgoing>I3</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:serviceTask id="Predict" name="Рассчитать и проверить цену">
+        <bpmn:incoming>I3</bpmn:incoming>
+        <bpmn:outgoing>I4</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:endEvent id="InnerEnd" name="">
+        <bpmn:incoming>I4</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="I1" sourceRef="InnerStart" targetRef="Load" />
+      <bpmn:sequenceFlow id="I2" sourceRef="Load" targetRef="Prepare" />
+      <bpmn:sequenceFlow id="I3" sourceRef="Prepare" targetRef="Predict" />
+      <bpmn:sequenceFlow id="I4" sourceRef="Predict" targetRef="InnerEnd" />
+    </bpmn:subProcess>
+    <bpmn:boundaryEvent id="ErrorBoundary" name="Ошибка" attachedToRef="Calculate" cancelActivity="true">
+      <bpmn:outgoing>F6</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="CatchCalculationError" />
+    </bpmn:boundaryEvent>
+    <bpmn:serviceTask id="Show" name="Показать прогноз в лакхах ₹">
+      <bpmn:incoming>F3</bpmn:incoming>
+      <bpmn:outgoing>F4</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="Review" name="Просмотреть результат">
+      <bpmn:incoming>F4</bpmn:incoming>
+      <bpmn:outgoing>F5</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="End" name="Оценка получена">
+      <bpmn:incoming>F5</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="ShowError" name="Показать сообщение об ошибке">
+      <bpmn:incoming>F6</bpmn:incoming>
+      <bpmn:outgoing>F7</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="Retry" name="Исправить данные или повторить запрос">
+      <bpmn:incoming>F7</bpmn:incoming>
+      <bpmn:outgoing>F8</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="F1" sourceRef="Start" targetRef="Input" />
+    <bpmn:sequenceFlow id="F2" sourceRef="Input" targetRef="Calculate" />
+    <bpmn:sequenceFlow id="F3" sourceRef="Calculate" targetRef="Show" />
+    <bpmn:sequenceFlow id="F4" sourceRef="Show" targetRef="Review" />
+    <bpmn:sequenceFlow id="F5" sourceRef="Review" targetRef="End" />
+    <bpmn:sequenceFlow id="F6" sourceRef="ErrorBoundary" targetRef="ShowError" />
+    <bpmn:sequenceFlow id="F7" sourceRef="ShowError" targetRef="Retry" />
+    <bpmn:sequenceFlow id="F8" sourceRef="Retry" targetRef="Input" />
+  </bpmn:process>
+  <bpmn:collaboration id="Collaboration_Main">
+    <bpmn:participant id="Pool_Main" name="Оценка стоимости автомобиля" processRef="Process_CarPrice" />
+  </bpmn:collaboration>
+  <bpmndi:BPMNDiagram id="Diagram_Main">
+    <bpmndi:BPMNPlane id="Plane_Main" bpmnElement="Collaboration_Main">
+      <bpmndi:BPMNShape id="Pool_Main_di" bpmnElement="Pool_Main" isHorizontal="true">
+        <dc:Bounds x="30" y="60" width="1730" height="540" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_User_di" bpmnElement="Lane_User" isHorizontal="true">
+        <dc:Bounds x="60" y="60" width="1700" height="170" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_App_di" bpmnElement="Lane_App" isHorizontal="true">
+        <dc:Bounds x="60" y="230" width="1700" height="370" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Start_di" bpmnElement="Start">
+        <dc:Bounds x="160" y="127" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="115" y="168" width="130" height="32" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Input_di" bpmnElement="Input">
+        <dc:Bounds x="240" y="110" width="200" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Calculate_di" bpmnElement="Calculate" isExpanded="true">
+        <dc:Bounds x="485" y="270" width="770" height="160" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="InnerStart_di" bpmnElement="InnerStart">
+        <dc:Bounds x="505" y="332" width="26" height="26" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Load_di" bpmnElement="Load">
+        <dc:Bounds x="555" y="308" width="150" height="74" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Prepare_di" bpmnElement="Prepare">
+        <dc:Bounds x="735" y="308" width="180" height="74" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Predict_di" bpmnElement="Predict">
+        <dc:Bounds x="945" y="308" width="180" height="74" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="InnerEnd_di" bpmnElement="InnerEnd">
+        <dc:Bounds x="1205" y="332" width="26" height="26" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ErrorBoundary_di" bpmnElement="ErrorBoundary">
+        <dc:Bounds x="1208" y="412" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1163" y="453" width="130" height="32" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Show_di" bpmnElement="Show">
+        <dc:Bounds x="1310" y="308" width="155" height="74" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Review_di" bpmnElement="Review">
+        <dc:Bounds x="1485" y="110" width="150" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_di" bpmnElement="End">
+        <dc:Bounds x="1680" y="127" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1635" y="168" width="130" height="32" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ShowError_di" bpmnElement="ShowError">
+        <dc:Bounds x="1040" y="492" width="220" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Retry_di" bpmnElement="Retry">
+        <dc:Bounds x="720" y="110" width="220" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="F1_di" bpmnElement="F1">
+        <di:waypoint x="196" y="145" />
+        <di:waypoint x="240" y="145" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F2_di" bpmnElement="F2">
+        <di:waypoint x="440" y="145" />
+        <di:waypoint x="470" y="145" />
+        <di:waypoint x="470" y="345" />
+        <di:waypoint x="485" y="345" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F3_di" bpmnElement="F3">
+        <di:waypoint x="1255" y="345" />
+        <di:waypoint x="1310" y="345" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F4_di" bpmnElement="F4">
+        <di:waypoint x="1465" y="345" />
+        <di:waypoint x="1560" y="345" />
+        <di:waypoint x="1560" y="180" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F5_di" bpmnElement="F5">
+        <di:waypoint x="1635" y="145" />
+        <di:waypoint x="1680" y="145" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F6_di" bpmnElement="F6">
+        <di:waypoint x="1226" y="448" />
+        <di:waypoint x="1226" y="468" />
+        <di:waypoint x="1150" y="468" />
+        <di:waypoint x="1150" y="492" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F7_di" bpmnElement="F7">
+        <di:waypoint x="1260" y="527" />
+        <di:waypoint x="1280" y="527" />
+        <di:waypoint x="1280" y="205" />
+        <di:waypoint x="830" y="205" />
+        <di:waypoint x="830" y="180" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F8_di" bpmnElement="F8">
+        <di:waypoint x="830" y="110" />
+        <di:waypoint x="830" y="78" />
+        <di:waypoint x="340" y="78" />
+        <di:waypoint x="340" y="110" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="I1_di" bpmnElement="I1">
+        <di:waypoint x="531" y="345" />
+        <di:waypoint x="555" y="345" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="I2_di" bpmnElement="I2">
+        <di:waypoint x="705" y="345" />
+        <di:waypoint x="735" y="345" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="I3_di" bpmnElement="I3">
+        <di:waypoint x="915" y="345" />
+        <di:waypoint x="945" y="345" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="I4_di" bpmnElement="I4">
+        <di:waypoint x="1125" y="345" />
+        <di:waypoint x="1205" y="345" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

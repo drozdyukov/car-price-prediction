@@ -1,0 +1,61 @@
+[project]
+name = "car-price-prediction"
+version = "0.1.0"
+description = "Учебный сервис прогноза стоимости подержанных автомобилей"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+license = "MIT"
+dependencies = [
+    "numpy==2.5.3",
+    "pandas==3.0.6",
+    "scikit-learn==1.9.1",
+    "scipy==1.18.1",
+    "streamlit==1.65.0",
+    "joblib==1.6.0",
+]
+
+[project.scripts]
+car-train = "car_price.cli:train_main"
+car-predict = "car_price.cli:predict_main"
+
+[tool.poetry]
+packages = [{include = "car_price", from = "src"}]
+
+[tool.poetry.group.dev.dependencies]
+pytest = ">=9,<10"
+ruff = ">=0.16,<0.17"
+mypy = ">=1.19,<2"
+pre-commit = ">=4.6,<5"
+
+[tool.poetry.group.notebook]
+optional = true
+
+[tool.poetry.group.notebook.dependencies]
+matplotlib = "==3.11.2"
+seaborn = "==0.13.2"
+statsmodels = "==0.15.0"
+ipykernel = "==7.4.0"
+jupyterlab = ">=4,<5"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = ["notebooks"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.mypy]
+python_version = "3.12"
+files = ["src/car_price"]
+ignore_missing_imports = true
+check_untyped_defs = true
+disallow_untyped_defs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[build-system]
+requires = ["poetry-core>=2.0,<3.0"]
+build-backend = "poetry.core.masonry.api"

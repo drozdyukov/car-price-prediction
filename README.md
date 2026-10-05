@@ -1,21 +1,147 @@
+# Оценка стоимости подержанного автомобиля
 
-# Car-Price-Prediction
-<p align="center"> 
-<img src="https://github.com/kartikeyBhadouria/Car-Price-Prediction/blob/main/model.png" alt="Website image">
-</p>
-<br>
+[Исходный репозиторий](https://github.com/kartikeyBhadouria/Car-Price-Prediction).
 
+ML-код оформлен как пакет `car_price`: он используется в Streamlit и командах терминала.
 
->This projects helps sellers or buyers to predict the price of used cars so easily.
->I have created a machine learning project, where users can find out there used car prices with giving few inputs like present price of ca in ex-showroom,year of purchase,fuel type etc. I have downloaded the dataset from kaggle. 
- - In this Project, we are going to predict the Price of Used Cars using various features.
- - I made a machine learning model that predicts the selling price of the used car, the web app is built using streamlit and deployed on Streamlit. 
- - If you want to view the model click on link : https://kartikeybhadouria-car-price-prediction-app-sd7gyr.streamlit.app/
- - During model building we will cover almost all data science concepts such as data load and cleaning, feature engineering, randomsearchcv for hyperparameter tunning,      cross validation etc. Technology and tools wise this project covers,
-    - Python
-    - Numpy and Pandas for data cleaning
-    - Matplotlib and Seaborn for data visualization
-    - Sklearn for model building
-    - Jupyter notebook, visual studio code as IDE
-    - Streamlit to built, deploy and manage web app
-     
+## Результаты тестирования на hh.ru
+
+Скриншот результатов тестирования навыков для первого пункта задания.
+
+![Результаты тестирования](docs/результаты%20тестирования.png)
+
+## Установка и запуск
+
+Требуются Python **3.12**, Git и Poetry **2.5 или новее**. Установите Poetry отдельно,
+например через `pipx install poetry`, и выполняйте команды из корня проекта:
+
+```bash
+poetry install
+poetry run pre-commit install
+poetry run car-train
+poetry run streamlit run app.py
+```
+
+Откройте адрес, указанный Streamlit, обычно `http://localhost:8501`.
+Окружение `.venv` создаётся локально; его не нужно активировать при использовании `poetry run`.
+Версии зависимостей фиксируются в `poetry.lock`. После клонирования `poetry install`
+восстанавливает окружение, а `pre-commit install` устанавливает хук в этом клоне.
+
+## Обучение и предсказания
+
+```bash
+poetry run car-train --config configs/default.toml
+poetry run car-predict --input data/raw/car_data.csv --output artifacts/predictions.csv
+```
+
+`car-train` разделяет исходные данные на обучающую и тестовую выборки **до обучения**,
+обучает Pipeline, вычисляет MAE, RMSE и R² и сохраняет:
+
+- `artifacts/model.joblib` — подготовку признаков и случайный лес в одном объекте;
+- `artifacts/metrics.json` — метрики, размеры выборок, seed, версию scikit-learn и параметры.
+
+Команды `python train.py` и `poetry run python train.py` сохранены как точки входа.
+При запуске из другой папки установленный в этом клоне пакет находит стандартную
+конфигурацию относительно исходных файлов. Пользовательские пути в TOML разрешаются
+относительно самого TOML-файла. Для установленного отдельно wheel передайте путь
+к конфигурации явно: `car-train --config /путь/к/configs/default.toml`.
+
+Для предсказания входной CSV должен содержать столбцы:
+`Present_Price`, `Year`, `Owner`, `Fuel_Type`, `Seller_Type`, `Transmission`.
+Дополнительные столбцы сохраняются в выходном CSV; прогноз добавляется в `Predicted_Price`.
+Входной CSV не перезаписывается. Команды завершаются с ненулевым кодом при ошибке.
+
+Пример строки:
+
+```csv
+Present_Price,Year,Owner,Fuel_Type,Seller_Type,Transmission
+5.59,2014,0,Petrol,Dealer,Manual
+```
+
+Допустимые категории: топливо `Petrol` / `Diesel` / `CNG`, продавец `Dealer` / `Individual`,
+коробка передач `Manual` / `Automatic`. Цена должна быть положительной, год — целым
+числом от 1900 до базового года, количество владельцев — целым неотрицательным числом.
+Пустые данные, пропуски и бесконечные значения отклоняются.
+
+## Проверки качества кода
+
+```bash
+poetry run ruff check .
+poetry run ruff format --check .
+poetry run mypy
+poetry run pytest
+poetry run pre-commit run --all-files
+poetry check --lock
+```
+
+Ruff проверяет ошибки, импорты и стиль; его форматтер приводит код к единому виду.
+mypy проверяет аннотации типов ML-пакета. pre-commit запускает Ruff и mypy перед
+коммитом. Хуки используют инструменты из окружения Poetry, поэтому их версии
+совпадают с зафиксированными версиями разработки. При автоматическом исправлении
+повторно добавьте файлы в индекс Git и повторите коммит.
+
+Тесты проверяют порядок и кодирование признаков, отклонение неправильного ввода,
+сохранение и загрузку Pipeline, воспроизводимость обучения, независимость путей
+от рабочей папки и сценарии интерфейса. Для тестов используется небольшой лес,
+чтобы не запускать полное обучение при каждом изменении кода.
+
+## Структура
+
+```text
+app.py                         точка входа Streamlit
+train.py                       совместимая точка входа обучения
+src/car_price/
+  config.py                    конфигурация и пути
+  data.py                      загрузка датасета и проверка целевой цены
+  features.py                  проверка и преобразование признаков
+  model.py                     создание Pipeline
+  train.py                     обучение и сохранение артефактов
+  evaluate.py                  MAE, RMSE и R²
+  predict.py                   загрузка Pipeline и предсказания
+  cli.py                       команды car-train и car-predict
+  ui.py                        русский интерфейс
+configs/default.toml           настройки данных, модели и выходных файлов
+data/raw/car_data.csv          исходный датасет
+notebooks/car_price_analysis.ipynb  исследовательский ноутбук
+tests/                         автоматические проверки
+docs/homework.md               описание выполнения пунктов 2 и 3 ДЗ
+pyproject.toml                 пакет, зависимости и правила проверок
+poetry.lock                    зафиксированные версии зависимостей
+.pre-commit-config.yaml        Git-хуки
+```
+
+## Ноутбук
+
+```bash
+poetry install --with notebook
+poetry run jupyter lab notebooks/car_price_analysis.ipynb
+```
+
+Ноутбук служит для исследования и подбора параметров. Его модель сохраняется отдельно
+в `artifacts/notebook_model.joblib`; приложение использует производственный Pipeline.
+В Jupyter выполняйте ноутбук с рабочей папкой `notebooks`, чтобы относительные пути
+к датасету и артефактам разрешались правильно. Идентификаторы CSV сохранены на английском.
+
+## Данные и ограничения
+
+Цены измеряются в **лакхах индийских рупий**: 1 лакх = 100 000 ₹.
+Возраст рассчитывается относительно **2020 года**, как в исходных данных.
+Пробег не входит в модель; бензин и CNG кодируются одинаково — поведение сохранено.
+Это учебная модель на небольшом историческом датасете индийского рынка.
+Для современных автомобилей или российского рынка нужны подходящие данные и переобучение.
+
+## Документы для сдачи
+
+- [Описание рефакторинга и настройки инструментов](docs/homework.md).
+- [Model Card](docs/model_card.md): данные, обучение, фактические метрики и ограничения.
+- [Описание BPMN-процесса](docs/bpmn.md).
+- [Редактируемая схема BPMN 2.0](docs/car_price_process.bpmn).
+- Изображение схемы: [SVG](docs/car_price_process.svg), [PNG для отчёта](docs/car_price_process.png).
+
+Схема описывает работу интерфейса, включая обработку ошибки и повторный запрос.
+Model Card отражает текущую модель; после переобучения нужно актуализировать метрики
+и хеши артефактов.
+
+## Лицензия
+
+Лицензия MIT и уведомление об авторских правах находятся в `LICENSE`.
